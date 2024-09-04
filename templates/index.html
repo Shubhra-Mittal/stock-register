@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Bar Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            width: 100%;
+            background-color: #f7f7f7;
+        }
+        .navbar .left-section {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: semi-bold;
+            color: #333;
+            padding: 10px 20px;
+        }
+        .navbar .nav-links {
+            display: flex;
+            gap: 15px;
+            padding-left: 20px;
+        }
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .navbar .nav-links a:hover {
+            background-color: #f0f0f0;
+        }
+        .navbar .buttons {
+            display: flex;
+            gap: 10px;
+            padding: 10px 20px;
+        }
+        .navbar .buttons .btn {
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .navbar .buttons .btn-primary {
+            background-color: #333;
+            color: #fff;
+            border-color: #333;
+        }
+        .navbar .buttons .btn-primary:hover {
+            background-color: #000;
+        }
+        .navbar .buttons .btn:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        /* Centering the upload dialog */
+        .upload-dialog {
+            background-color: #f7f7f7;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            max-width: 700px;
+            text-align: center;
+            margin-top: 100px; /* Ensure it doesn't overlap with the navbar */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%; /* Ensure form takes full width */
+            margin: 0;
+            padding: 0;
+        }
+
+        .dialog-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+
+        .upload-section, .input-section {
+            width: 45%;
+        }
+
+        .upload-section {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f7f7f7;
+            text-align: center;
+        }
+
+        .upload-section input[type="file"] {
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .upload-section .file-preview {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            height: 150px;
+            overflow: auto;
+            background-color: #fff;
+            text-align: left;
+        }
+
+        .input-section h3 {
+            margin-bottom: 10px;
+        }
+
+        .input-section input[type="number"],
+        .input-section input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .submit-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .upload-dialog button {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .upload-dialog button:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="left-section">
+            <div class="logo">HHelite Productivity Suite</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#tools">Tools</a>
+            </div>
+        </div>
+        <div class="buttons">
+            <a href="#login" class="btn">Login</a>
+        </div>
+    </nav>
+     <!-- Form starts here -->
+     <form action="/upload" method="POST" enctype="multipart/form-data">
+        <!-- Upload Dialog Box -->
+        <div class="upload-dialog" id="uploadDialog">
+            <h2>Stock Register</h2>
+            
+            <div class="dialog-container">
+                <!-- Left Section: File Upload and Preview -->
+                <div class="upload-section">
+                    <input type="file" name="uploadedFile" id="fileUpload" accept=".xlsx, .xls">
+                    <div class="file-preview" id="filePreview">No file uploaded yet.</div>
+                </div>
+                
+                <!-- Right Section: Numeric Input Boxes -->
+                <div class="input-section">
+                    <h3>Enter the first lower bound</h3>
+                    <input type="number" name="firstLowerBound" id="firstLowerBound">
+                    
+                    <h3>Enter all the upper bounds, separated by spaces</h3>
+                    <input type="text" name="upperBounds" id="upperBounds">
+                </div>
+            </div>
+            <div class="submit-container">
+                <button type="submit" id="submitData">Submit</button>
+            </div>
+        </div>
+    </form>
+<script>
+    const fileUpload = document.getElementById("fileUpload");
+    const filePreview = document.getElementById("filePreview");
+    const firstLowerBound = document.getElementById("firstLowerBound");
+    const upperBounds = document.getElementById("upperBounds");
+    const submitData = document.getElementById("submitData");
+
+    // Handle file upload and show preview
+    fileUpload.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                filePreview.textContent = `Uploaded file: ${file.name}`;
+            };
+            reader.readAsBinaryString(file);  // Read the file as a binary string for preview
+        }
+    });
+
+    // Capture the numeric inputs and log them for later use
+    submitData.addEventListener("click", function() {
+        const lowerBound = parseInt(firstLowerBound.value);
+        const upperBoundsArray = upperBounds.value.split(' ').map(Number); // Split by space and convert to integers
+
+        // Log or store the data (to be used by another Python program)
+        console.log("First Lower Bound: ", lowerBound);
+        console.log("Upper Bounds: ", upperBoundsArray);
+
+        // Now you can send these values to the Python backend if needed
+    });
+</script>
+</body>
+</html>
