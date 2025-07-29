@@ -75,7 +75,9 @@ def main(input_file_path, output_file_path, first_lower_bound, upper_bounds):
             else:
                 condition |= (df['Rate'] >= low)
         
-        outside_ranges = df[~condition]
+        df = df.reset_index(drop=True)
+        condition = condition.reset_index(drop=True)
+        outside_ranges = df.loc[~condition.values]
         ignored_rates = outside_ranges['Rate'].unique()
         
         return ignored_rates
