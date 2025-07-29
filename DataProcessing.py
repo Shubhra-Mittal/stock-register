@@ -13,7 +13,7 @@ def main(input_file_path, output_file_path):
         df = pd.read_excel(input_file_path, sheet_name=sheet_name)
         
         # Sort the data by date
-        df = df.sort_values(by='Date')
+        df = df.sort_values(by='Date').reset_index(drop=True)
         
         df['Balance'] = 0  # Initialize a new Balance column with zeros
         
